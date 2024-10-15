@@ -52,6 +52,7 @@ func (s *server) Start() error {
 	router.Handle("GET /static/", http.StripPrefix("/static/", fileServer))
 
 	router.HandleFunc("GET /", s.defaultHandler)
+	router.HandleFunc("GET /about", s.aboutHandler)
 	router.HandleFunc("GET /health", s.healthCheckHandler)
 	router.HandleFunc("POST /guests", s.addGuestHandler)
 	router.HandleFunc("GET /guests", s.getGuestsHandler)
@@ -83,9 +84,19 @@ func (s *server) Start() error {
 // GET /
 func (s *server) defaultHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	err := templates.Layout(nil, "Spooktober party").Render(r.Context(), w)
+	homeTemplate := templates.Home()
+	err := templates.Layout(homeTemplate, "Spooktober party", "/").Render(r.Context(), w)
 	if err != nil {
-		s.logger.Printf("Error when rendering layout: %v", err)
+		s.logger.Printf("Error when rendering home: %v", err)
+	}
+}
+
+func (s *server) aboutHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	aboutTemplate := templates.About()
+	err := templates.Layout(aboutTemplate, "About", "/about").Render(r.Context(), w)
+	if err != nil {
+		s.logger.Printf("Error when rendering about: %v", err)
 	}
 }
 

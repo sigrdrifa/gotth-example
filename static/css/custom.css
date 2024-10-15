@@ -8,7 +8,6 @@
   transition: all 1s ease-in;
 }
 
-a {
-  color: orange;
-  text-decoration: none;
+body {
+  background: #0a0e16;
 }
