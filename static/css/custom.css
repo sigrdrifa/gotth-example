@@ -1,0 +1,14 @@
+/* Custom CSS rules go in here */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] { display: none !important; }
+.smooth {
+  transition: all 1s ease-in;
+}
+
+a {
+  color: orange;
+  text-decoration: none;
+}
