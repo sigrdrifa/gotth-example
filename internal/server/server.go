@@ -56,6 +56,7 @@ func (s *server) Start() error {
 	router.HandleFunc("GET /health", s.healthCheckHandler)
 	router.HandleFunc("POST /guests", s.addGuestHandler)
 	router.HandleFunc("GET /guests", s.getGuestsHandler)
+	router.HandleFunc("GET /signup", s.getSignupHandler)
 
 	// define server
 	s.httpServer = &http.Server{
@@ -127,7 +128,15 @@ func (s *server) addGuestHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
+	guests, err := s.guestDb.GetGuests()
+	if err != nil {
+		s.logger.Printf("Error when getting guests: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	templates.Guests(guests, true).Render(r.Context(), w)
+
 }
 
 // GetGuestsHandler is a handler to get all guests from the guest store
@@ -141,6 +150,10 @@ func (s *server) getGuestsHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	for _, guest := range guests {
-		w.Write([]byte(fmt.Sprintf("Name: %s, Email: %s, Bringing: %s\n", guest.Name, guest.Email, guest.BringingItems)))
+		w.Write([]byte(fmt.Sprintf("Name: %s, Email: %s\n", guest.Name, guest.Email)))
 	}
+}
+
+func (s *server) getSignupHandler(w http.ResponseWriter, r *http.Request) {
+	templates.Signup().Render(r.Context(), w)
 }

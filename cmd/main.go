@@ -15,7 +15,7 @@ func main() {
 
 	logger.Print("Creating guests store..")
 	guestDb := store.NewGuestStore(logger)
-	guestDb.AddGuest(store.Guest{Name: "Dracula", Email: "dr@acula.ro", BringingItems: "fangs"})
+	guestDb.AddGuest(store.Guest{Name: "Sigrid", Email: "sig@fake-email.no"})
 
 	srv, err := server.NewServer(logger, port, guestDb)
 	if err != nil {

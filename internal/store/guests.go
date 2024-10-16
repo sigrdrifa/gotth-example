@@ -10,9 +10,8 @@ import (
 )
 
 type Guest struct {
-	Name          string
-	Email         string
-	BringingItems string
+	Name  string
+	Email string
 }
 
 type guestStore struct {
@@ -36,6 +35,7 @@ func (gs *guestStore) AddGuest(guest Guest) error {
 		return fmt.Errorf("A spooky guest with email %s already exists", guest.Email)
 	}
 	gs.guests[guest.Email] = guest
+	fmt.Printf("Added guest: %v \n", guest)
 	return nil
 }
 
